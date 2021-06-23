@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .helpers.auth import user_construct
+from .helpers import user_construct
 from .models import Chat, Room
 from .serializers import ChatSerializer, LoginSerializer, RoomSerializer
 
