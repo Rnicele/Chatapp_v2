@@ -1,7 +1,11 @@
-from django.forms.models import model_to_dict
+from rest_framework.authtoken.models import Token
 
 
 def user_construct(user):
-    test = model_to_dict(user)
     fields = ['id', 'email', 'first_name', 'last_name', 'date_joined']
-    return {'user': {field: test[field] for field in fields}}
+    token, created = Token.objects.get_or_create(user=user)
+
+    return {
+        'user': {field: getattr(user, field) for field in fields},
+        'token': token.key
+    }

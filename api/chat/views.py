@@ -9,7 +9,7 @@ from .serializers import ChatSerializer, LoginSerializer, RoomSerializer
 
 class Login(APIView):
     def post(self, request):
-        serializer = LoginSerializer(data=request.POST)
+        serializer = LoginSerializer(data=request.data)
 
         if not serializer.is_valid():
             return Response(serializer.errors, 400)
