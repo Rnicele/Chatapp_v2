@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 // import Home from '../views/Home.vue'
 import SignUp from '../views/Signup.vue'
 import Signin from '../views/Signin.vue'
+import Chat from '../views/Chat.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -28,6 +29,11 @@ const routes = [
     path: '/Signin',
     name: 'Signin',
     component: Signin
+  },
+  {
+    path: '/Chat',
+    name: 'Chat',
+    component: Chat
   }
 ]
 

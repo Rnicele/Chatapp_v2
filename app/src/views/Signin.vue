@@ -41,7 +41,7 @@
 </template>
 
 <script>
- import axios from "axios"
+//  import axios from "axios"
 
   export default {
     name: 'Signin',
@@ -74,6 +74,9 @@
                 },
                 "token": "4110f7711025c25822edf3ccbb591c0245853fc1"
             }
+
+            localStorage.setItem("auth", userLogin);
+            this.$router.push('Chat')
         }
     }
   }
