@@ -25,7 +25,7 @@
                     ></v-text-field>
 
                     <v-card-actions>
-                        <v-btn class="mr-4">
+                        <v-btn class="mr-4" @click="login()">
                         Login
                         </v-btn>
                     </v-card-actions>
@@ -39,3 +39,42 @@
         </v-row>
      </v-container>
 </template>
+
+<script>
+ import axios from "axios"
+
+  export default {
+    name: 'Signin',
+    data: function () {
+        return {
+            username: '',
+            password: '',
+            valid: false
+        }
+    },
+    methods: {
+        async login(){
+            console.log("login")
+            // try {
+            //     const userLogin = await axios.post('http://127.0.0.1:7000/login/', {
+            //         username: this.username,
+            //         password: this.password,
+            //     });
+            //     console.log(userLogin)
+            // } catch (error) {
+            //     console.error(error)
+            // }
+            const userLogin = {
+                "user": {
+                    "id": 2,
+                    "email": "",
+                    "first_name": "",
+                    "last_name": "",
+                    "date_joined": "2021-06-15T01:21:07.550406Z"
+                },
+                "token": "4110f7711025c25822edf3ccbb591c0245853fc1"
+            }
+        }
+    }
+  }
+</script>
