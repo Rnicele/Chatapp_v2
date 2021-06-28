@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Signin from "../views/Signin.vue";
 // import Home from '../views/Home.vue'
-import SignUp from '../views/Signup.vue'
-import Signin from '../views/Signin.vue'
-Vue.use(VueRouter)
+import SignUp from "../views/Signup.vue";
+Vue.use(VueRouter);
 
 const routes = [
   // {
@@ -20,19 +20,20 @@ const routes = [
   //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   // },
   {
-    path: '/Signup',
-    name: 'Signup',
-    component: SignUp
+    path: "/Signup",
+    name: "Signup",
+    component: SignUp,
   },
   {
-    path: '/Signin',
-    name: 'Signin',
-    component: Signin
-  }
-]
+    path: "/Signin",
+    name: "Signin",
+    component: Signin,
+  },
+];
 
 const router = new VueRouter({
-  routes
-})
+  routes,
+  mode: "history",
+});
 
-export default router
+export default router;
