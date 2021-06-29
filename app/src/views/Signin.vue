@@ -41,7 +41,7 @@
 </template>
 
 <script>
-//  import axios from "axios"
+import axios from "axios"
 
   export default {
     name: 'Signin',
@@ -55,28 +55,18 @@
     methods: {
         async login(){
             console.log("login")
-            // try {
-            //     const userLogin = await axios.post('http://127.0.0.1:7000/login/', {
-            //         username: this.username,
-            //         password: this.password,
-            //     });
-            //     console.log(userLogin)
-            // } catch (error) {
-            //     console.error(error)
-            // }
-            const userLogin = {
-                "user": {
-                    "id": 2,
-                    "email": "",
-                    "first_name": "",
-                    "last_name": "",
-                    "date_joined": "2021-06-15T01:21:07.550406Z"
-                },
-                "token": "4110f7711025c25822edf3ccbb591c0245853fc1"
-            }
+            try {
+                const userLogin = await axios.post('http://127.0.0.1:7000/login/', {
+                    username: this.username,
+                    password: this.password,
+                });
 
-            localStorage.setItem("auth", userLogin);
-            this.$router.push('Chat')
+                localStorage.setItem("auth", JSON.stringify(userLogin));
+                this.$router.push('Chat')
+                
+            } catch (error) {
+                alert(error.response.data);
+            }
         }
     }
   }

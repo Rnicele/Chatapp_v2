@@ -2,15 +2,10 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Signin from "../views/Signin.vue";
 // import Home from '../views/Home.vue'
-<<<<<<< HEAD
-import SignUp from '../views/Signup.vue'
-import Signin from '../views/Signin.vue'
+import SignUp from '../views/Signup.vue';
+// import Signin from '../views/Signin.vue';
 import Chat from '../views/Chat.vue'
 Vue.use(VueRouter)
-=======
-import SignUp from "../views/Signup.vue";
-Vue.use(VueRouter);
->>>>>>> 1679ea4835bafaf6a47ae08d9667acea1c318645
 
 const routes = [
   // {
@@ -32,7 +27,6 @@ const routes = [
     component: SignUp,
   },
   {
-<<<<<<< HEAD
     path: '/Signin',
     name: 'Signin',
     component: Signin
@@ -43,13 +37,6 @@ const routes = [
     component: Chat
   }
 ]
-=======
-    path: "/Signin",
-    name: "Signin",
-    component: Signin,
-  },
-];
->>>>>>> 1679ea4835bafaf6a47ae08d9667acea1c318645
 
 const router = new VueRouter({
   routes,
