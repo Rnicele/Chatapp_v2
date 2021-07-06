@@ -1,46 +1,36 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Signin from "../views/Signin.vue";
-// import Home from '../views/Home.vue'
-import SignUp from '../views/Signup.vue';
-// import Signin from '../views/Signin.vue';
-import Chat from '../views/Chat.vue'
-Vue.use(VueRouter)
+import SignIn from "../views/auth/SignIn.vue";
+import SignUp from "../views/auth/SignUp.vue";
+import Chat from "../views/Chat.vue";
+import Home from "../views/Home.vue";
+
+Vue.use(VueRouter);
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home
-  // },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // },
   {
-    path: "/Signup",
-    name: "Signup",
+    path: "/",
+    name: "Home",
+    component: Home,
+  },
+  {
+    path: "/sign-up",
+    name: "Sign Up",
     component: SignUp,
   },
   {
-    path: '/Signin',
-    name: 'Signin',
-    component: Signin
+    path: "/sign-in",
+    name: "Sign In",
+    component: SignIn,
   },
   {
-    path: '/Chat',
-    name: 'Chat',
-    component: Chat
-  }
-]
+    path: "/chat",
+    name: "Chat",
+    component: Chat,
+  },
+];
 
-const router = new VueRouter({
+export default new VueRouter({
   routes,
   mode: "history",
 });
-
-export default router;

@@ -1,17 +1,17 @@
 <template>
   <v-app style="background-color: aquamarine;">
     <v-main>
-      <router-view/>
+      <router-view />
     </v-main>
+
+    <Snackbar></Snackbar>
   </v-app>
 </template>
 
 <script>
+import Snackbar from "@/components/Snackbar.vue";
 
 export default {
-
-  data: () => ({
-    //
-  }),
+  components: { Snackbar },
 };
 </script>
