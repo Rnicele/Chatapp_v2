@@ -2,7 +2,7 @@
   <v-container fill-height fluid>
     <v-row align="center" justify="center">
       <v-card width="700" class="mx-auto">
-        <v-card-title>SIGN UP</v-card-title>
+        <v-card-title>SIGN IN</v-card-title>
         <v-divider></v-divider>
 
         <v-alert v-if="hasError" type="error"

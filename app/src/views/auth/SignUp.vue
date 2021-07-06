@@ -11,6 +11,7 @@
           style="margin: 20px 30px 0 30px;"
         >
           <v-text-field
+            ref="form"
             outlined
             v-model="first_name"
             label="First Name"
@@ -19,6 +20,7 @@
           ></v-text-field>
 
           <v-text-field
+            ref="form"
             outlined
             v-model="last_name"
             label="Last Name"
@@ -27,6 +29,7 @@
           ></v-text-field>
 
           <v-text-field
+            ref="form"
             outlined
             v-model="username"
             label="Username"
@@ -35,6 +38,7 @@
           ></v-text-field>
 
           <v-text-field
+            ref="form"
             outlined
             v-model="email"
             label="E-mail"
@@ -43,6 +47,7 @@
           ></v-text-field>
 
           <v-text-field
+            ref="form"
             outlined
             v-model="password"
             type="password"
@@ -85,12 +90,18 @@ export default {
   methods: {
     async register() {
       try {
-        const { data } = await axios.post(
-          "http://127.0.0.1:7000/register/",
-          {}
+        const { data } = await axios.post("http://127.0.0.1:7000/register/", { 
+            first_name: this.first_name,
+            last_name: this.last_name,
+            email: this.email,
+            username: this.username,
+            password: this.password,
+            }
         );
+
         this.$store.dispatch("setUserToken", data);
         this.$router.push("chat");
+       
       } catch (error) {
         alert(error.response.data);
       }
