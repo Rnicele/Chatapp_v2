@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import AlreadyAuthenticatedGuard from "../guards/alreadyAuthenticated";
 import AuthGuard from "../guards/auth";
 import Chat from "../views/app/Chat.vue";
 import App from "../views/app/Index.vue";
@@ -18,12 +19,14 @@ const routes = [
   {
     path: "/sign-up",
     name: "Sign Up",
-    component: SignUp
+    component: SignUp,
+    beforeEnter: AlreadyAuthenticatedGuard
   },
   {
     path: "/sign-in",
     name: "Sign In",
-    component: SignIn
+    component: SignIn,
+    beforeEnter: AlreadyAuthenticatedGuard
   },
   {
     path: "/app",
