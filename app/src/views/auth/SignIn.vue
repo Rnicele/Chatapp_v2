@@ -20,7 +20,7 @@
             outlined
             v-model="username"
             label="Username"
-            :rules="[(v) => !!v || 'Username is required']"
+            :rules="[v => !!v || 'Username is required']"
             required
           ></v-text-field>
 
@@ -29,7 +29,7 @@
             v-model="password"
             type="password"
             label="Password"
-            :rules="[(v) => !!v || 'Password is required']"
+            :rules="[v => !!v || 'Password is required']"
             required
           ></v-text-field>
 
@@ -60,7 +60,7 @@ export default {
       password: null,
       valid: false,
       hasError: false,
-      loading: false,
+      loading: false
     };
   },
   methods: {
@@ -74,7 +74,7 @@ export default {
       try {
         const { data } = await axios.post("http://127.0.0.1:7000/login/", {
           username: this.username,
-          password: this.password,
+          password: this.password
         });
         this.$store.dispatch("setUserToken", data);
         this.$snackbar.showMessage("Signed in successfully.");
@@ -85,7 +85,7 @@ export default {
       }
 
       this.loading = false;
-    },
-  },
+    }
+  }
 };
 </script>
