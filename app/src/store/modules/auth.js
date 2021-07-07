@@ -4,6 +4,7 @@ const state = () => ({
 });
 
 const getters = {
+  isAuthenticated: state => state.user && state.token,
   getUser: state => state.user,
   getToken: state => state.token,
   getUserName: state => state.user.first_name,

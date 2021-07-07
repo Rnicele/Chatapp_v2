@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import AuthGuard from "../guards/auth";
 import Chat from "../views/app/Chat.vue";
 import App from "../views/app/Index.vue";
 import SignIn from "../views/auth/SignIn.vue";
@@ -27,6 +28,7 @@ const routes = [
   {
     path: "/app",
     component: App,
+    beforeEnter: AuthGuard,
     redirect: "chat",
     children: [
       {
