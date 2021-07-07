@@ -1,6 +1,6 @@
 const state = () => ({
-  user: null,
-  token: null
+  user: localStorage.getItem("user"),
+  token: localStorage.getItem("token")
 });
 
 const getters = {
