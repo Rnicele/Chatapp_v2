@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Chat from "../views/app/Chat.vue";
+import App from "../views/app/Index.vue";
 import SignIn from "../views/auth/SignIn.vue";
 import SignUp from "../views/auth/SignUp.vue";
 import Home from "../views/Home.vue";
@@ -11,26 +12,33 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: Home
   },
   {
     path: "/sign-up",
     name: "Sign Up",
-    component: SignUp,
+    component: SignUp
   },
   {
     path: "/sign-in",
     name: "Sign In",
-    component: SignIn,
+    component: SignIn
   },
   {
-    path: "/chat",
-    name: "Chat",
-    component: Chat,
-  },
+    path: "/app",
+    component: App,
+    redirect: "chat",
+    children: [
+      {
+        path: "chat",
+        name: "Chat",
+        component: Chat
+      }
+    ]
+  }
 ];
 
 export default new VueRouter({
   routes,
-  mode: "history",
+  mode: "history"
 });

@@ -5,8 +5,8 @@
         <v-card-title>SIGN IN</v-card-title>
         <v-divider></v-divider>
 
-        <v-alert v-if="hasError" type="error"
-          >Username or password is incorrect.
+        <v-alert v-if="hasError" type="error">
+          Username or password is incorrect.
         </v-alert>
 
         <v-form
@@ -78,7 +78,7 @@ export default {
         });
         this.$store.dispatch("setUserToken", data);
         this.$snackbar.showMessage("Signed in successfully.");
-        this.$router.push("chat");
+        this.$router.push("app/chat");
       } catch (error) {
         this.hasError = true;
         console.error(error.response.data);

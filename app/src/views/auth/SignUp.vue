@@ -15,7 +15,7 @@
             outlined
             v-model="first_name"
             label="First Name"
-            :rules="[(v) => !!v || 'First Name is required']"
+            :rules="[v => !!v || 'First Name is required']"
             required
           ></v-text-field>
 
@@ -24,7 +24,7 @@
             outlined
             v-model="last_name"
             label="Last Name"
-            :rules="[(v) => !!v || 'Last Name is required']"
+            :rules="[v => !!v || 'Last Name is required']"
             required
           ></v-text-field>
 
@@ -33,7 +33,7 @@
             outlined
             v-model="username"
             label="Username"
-            :rules="[(v) => !!v || 'Username is required']"
+            :rules="[v => !!v || 'Username is required']"
             required
           ></v-text-field>
 
@@ -42,7 +42,7 @@
             outlined
             v-model="email"
             label="E-mail"
-            :rules="[(v) => !!v || 'Email is required']"
+            :rules="[v => !!v || 'Email is required']"
             required
           ></v-text-field>
 
@@ -52,7 +52,7 @@
             v-model="password"
             type="password"
             label="Password"
-            :rules="[(v) => !!v || 'Password is required']"
+            :rules="[v => !!v || 'Password is required']"
             required
           ></v-text-field>
 
@@ -84,28 +84,26 @@ export default {
       last_name: null,
       email: null,
       username: null,
-      password: null,
+      password: null
     };
   },
   methods: {
     async register() {
       try {
-        const { data } = await axios.post("http://127.0.0.1:7000/register/", { 
-            first_name: this.first_name,
-            last_name: this.last_name,
-            email: this.email,
-            username: this.username,
-            password: this.password,
-            }
-        );
+        const { data } = await axios.post("http://127.0.0.1:7000/register/", {
+          first_name: this.first_name,
+          last_name: this.last_name,
+          email: this.email,
+          username: this.username,
+          password: this.password
+        });
 
         this.$store.dispatch("setUserToken", data);
-        this.$router.push("chat");
-       
+        this.$router.push("app/chat");
       } catch (error) {
         alert(error.response.data);
       }
-    },
-  },
+    }
+  }
 };
 </script>
