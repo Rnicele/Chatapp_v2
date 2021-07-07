@@ -18,6 +18,12 @@ const mutations = {
   setToken(state, payload) {
     state.token = payload;
     localStorage.setItem("token", payload);
+  },
+  resetAuth(state) {
+    state.user = null;
+    state.token = null;
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   }
 };
 
@@ -27,6 +33,9 @@ const actions = {
   setUserToken: ({ commit }, payload) => {
     commit("setUser", payload.user);
     commit("setToken", payload.token);
+  },
+  signOut: ({ commit }) => {
+    commit("resetAuth");
   }
 };
 
