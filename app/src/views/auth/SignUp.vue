@@ -4,6 +4,11 @@
       <v-card width="700" class="mx-auto">
         <v-card-title>SIGN UP</v-card-title>
         <v-divider></v-divider>
+
+        <v-alert v-for="(item, index) in errors" :key="index" type="error">
+          {{ item }}
+        </v-alert>
+
         <v-form
           ref="form"
           v-model="valid"
@@ -11,7 +16,6 @@
           style="margin: 20px 30px 0 30px;"
         >
           <v-text-field
-            ref="form"
             outlined
             v-model="first_name"
             label="First Name"
@@ -20,7 +24,6 @@
           ></v-text-field>
 
           <v-text-field
-            ref="form"
             outlined
             v-model="last_name"
             label="Last Name"
@@ -29,7 +32,6 @@
           ></v-text-field>
 
           <v-text-field
-            ref="form"
             outlined
             v-model="username"
             label="Username"
@@ -38,7 +40,6 @@
           ></v-text-field>
 
           <v-text-field
-            ref="form"
             outlined
             v-model="email"
             label="E-mail"
@@ -47,7 +48,6 @@
           ></v-text-field>
 
           <v-text-field
-            ref="form"
             outlined
             v-model="password"
             type="password"
@@ -57,7 +57,7 @@
           ></v-text-field>
 
           <v-card-actions>
-            <v-btn class="mr-4" @click="register">
+            <v-btn class="mr-4" @click="register" :loading="loading">
               Signup
             </v-btn>
           </v-card-actions>
@@ -84,11 +84,19 @@ export default {
       last_name: null,
       email: null,
       username: null,
-      password: null
+      password: null,
+      errors: [],
+      loading: false
     };
   },
   methods: {
     async register() {
+      if (!this.$refs.form.validate()) {
+        return;
+      }
+
+      this.loading = true;
+
       try {
         const { data } = await axios.post("http://127.0.0.1:7000/register/", {
           first_name: this.first_name,
@@ -99,10 +107,14 @@ export default {
         });
 
         this.$store.dispatch("setUserToken", data);
+        this.$snackbar.showMessage(`Welcome ${this.first_name}!`);
         this.$router.push("app/chat");
       } catch (error) {
-        alert(error.response.data);
+        console.error(error.response.data);
+        this.errors = error.response.data;
       }
+
+      this.loading = false;
     }
   }
 };

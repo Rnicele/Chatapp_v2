@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -29,7 +30,10 @@ class Register(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, 400)
 
-        user = serializer.register()
+        try:
+            user = serializer.register()
+        except ValidationError as e:
+            return Response(e.messages, 400)
 
         return Response(user_construct(user))
 

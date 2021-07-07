@@ -51,6 +51,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Signin",
@@ -77,7 +78,7 @@ export default {
           password: this.password
         });
         this.$store.dispatch("setUserToken", data);
-        this.$snackbar.showMessage("Signed in successfully.");
+        this.$snackbar.showMessage(`Welcome back ${this.getUserName}!`);
         this.$router.push("app/chat");
       } catch (error) {
         this.hasError = true;
@@ -86,6 +87,9 @@ export default {
 
       this.loading = false;
     }
+  },
+  computed: {
+    ...mapGetters(["getUserName"])
   }
 };
 </script>

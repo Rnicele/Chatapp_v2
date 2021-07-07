@@ -1,11 +1,13 @@
 const state = () => ({
   user: null,
-  token: null,
+  token: null
 });
 
 const getters = {
-  getUser: (state) => state.user,
-  getToken: (state) => state.token,
+  getUser: state => state.user,
+  getToken: state => state.token,
+  getUserName: state => state.user.first_name,
+  getUserFullName: state => `${state.user.first_name} ${state.user.last_name}`
 };
 
 const mutations = {
@@ -16,7 +18,7 @@ const mutations = {
   setToken(state, payload) {
     state.token = payload;
     localStorage.setItem("token", payload);
-  },
+  }
 };
 
 const actions = {
@@ -25,12 +27,12 @@ const actions = {
   setUserToken: ({ commit }, payload) => {
     commit("setUser", payload.user);
     commit("setToken", payload.token);
-  },
+  }
 };
 
 export default {
   state,
   actions,
   mutations,
-  getters,
+  getters
 };

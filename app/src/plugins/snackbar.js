@@ -7,9 +7,9 @@ const snackbarPlugin = {
     Vue.prototype.$snackbar = {
       showMessage: function(message) {
         store.commit("setSnackBarMessage", message, { root: true });
-      },
+      }
     };
-  },
+  }
 };
 
 export default snackbarPlugin;

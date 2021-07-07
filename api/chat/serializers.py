@@ -1,5 +1,8 @@
 from django.contrib.auth import authenticate, get_user_model
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
 
 from .models import Chat, Room
 
@@ -24,6 +27,7 @@ class RegisterSerializer(serializers.Serializer):
     def register(self):
         user = UserModel(**self.validated_data)
         user.set_password(self.validated_data['password'])
+        user.validate_unique()
         user.save()
 
         return user
