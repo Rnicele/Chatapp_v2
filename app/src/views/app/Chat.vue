@@ -9,7 +9,7 @@
         <div class="body" style="margin: 0 10px 10px 10px;">
           <v-list dense>
             <v-list-item-group
-              v-model="selectedItem"
+              
               color="primary"
             >
               <v-list-item
@@ -54,8 +54,10 @@
                 <v-row no-gutters>
                   <v-col>
                     <div class="d-flex flex-row align-center">
-                      <v-text-field v-model="msg" placeholder="Type Something" @keypress.enter="send"></v-text-field>
-                      <v-btn icon class="ml-4" @click="send"><v-icon>mdi-send</v-icon></v-btn>
+                      <!-- <v-text-field v-model="msg" placeholder="Type Something" @keypress.enter="send"></v-text-field>
+                      <v-btn icon class="ml-4" @click="send"><v-icon>mdi-send</v-icon></v-btn> -->
+                      <v-text-field placeholder="Type Something"></v-text-field>
+                      <v-btn icon class="ml-4" ><v-icon>mdi-send</v-icon></v-btn>
                     </div>
                   </v-col>
                 </v-row>
@@ -88,7 +90,7 @@
     methods: {
       async chatName(name){
         this.hasClick = true;
-        console.log("click", name)
+        // console.log("click", name)
         this.name = name.text;
       }
     }
