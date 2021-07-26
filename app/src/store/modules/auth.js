@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const state = () => ({
   user: localStorage.getItem("user"),
   token: localStorage.getItem("token")
@@ -34,6 +36,7 @@ const actions = {
   setUserToken: ({ commit }, payload) => {
     commit("setUser", payload.user);
     commit("setToken", payload.token);
+    axios.defaults.headers.common["Authorization"] = `Token ${payload.token}`;
   },
   signOut: ({ commit }) => {
     commit("resetAuth");

@@ -1,3 +1,4 @@
+import axios from "axios";
 import Vue from "vue";
 import App from "./App.vue";
 import snackbarPlugin from "./plugins/snackbar";
@@ -9,9 +10,15 @@ Vue.use(snackbarPlugin, { store });
 
 Vue.config.productionTip = false;
 
+if (localStorage.getItem("token")) {
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Token ${localStorage.getItem("token")}`;
+}
+
 new Vue({
   router,
   store,
   vuetify,
-  render: (h) => h(App),
+  render: h => h(App)
 }).$mount("#app");
