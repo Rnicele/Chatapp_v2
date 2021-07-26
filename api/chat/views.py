@@ -1,5 +1,8 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from rest_framework import generics
+from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -38,21 +41,26 @@ class Register(APIView):
         return Response(user_construct(user))
 
 
-class RoomList(generics.ListCreateAPIView):
-    queryset = Room.objects.all()
-    serializer_class = sl.RoomSerializer
+class UserViewSet(viewsets.ViewSet):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
+    def list(self, request):
+        query_set = User.objects.all()
+        users = sl.UserSerializer(query_set, many=True)
+        return Response(users.data)
 
-class RoomDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Room.objects.all()
-    serializer_class = sl.RoomSerializer
+    # def create(self, request):
+    #     pass
 
+    # def retrieve(self, request, pk=None):
+    #     pass
 
-class ChatList(generics.ListCreateAPIView):
-    queryset = Chat.objects.all()
-    serializer_class = sl.ChatSerializer
+    # def update(self, request, pk=None):
+    #     pass
 
+    # def partial_update(self, request, pk=None):
+    #     pass
 
-class ChatDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Chat.objects.all()
-    serializer_class = sl.ChatSerializer
+    # def destroy(self, request, pk=None):
+    #     pass

@@ -10,6 +10,11 @@ class Room(models.Model):
         return self.name
 
 
+class RoomUser(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+
 class Chat(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
