@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from . import serializers as sl
 from .helpers import user_construct
-from .models import Chat, Room
+from .models import Room, RoomUser
 
 
 class Login(APIView):
@@ -46,9 +46,8 @@ class UserViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_set = User.objects.all()
-        users = sl.UserSerializer(query_set, many=True)
-        return Response(users.data)
+        query_set = User.objects.exclude(pk=request.user.pk)
+        return Response(sl.UserSerializer(query_set, many=True).data)
 
     # def create(self, request):
     #     pass
@@ -64,3 +63,39 @@ class UserViewSet(viewsets.ViewSet):
 
     # def destroy(self, request, pk=None):
     #     pass
+
+
+class RoomViewSet(viewsets.ViewSet):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def room_chats(self, request):
+        if not 'uid' in request.GET or not 'cuid' in request.GET:
+            return Response('Missing parameters.', 400)
+
+        try:
+            user = User.objects.get(id=request.GET['uid'])
+            connected_user = User.objects.get(id=request.GET['cuid'])
+        except User.DoesNotExist:
+            return Response('Users not found.', 404)
+
+        pivot = RoomUser.objects.filter(user_id=user.pk)
+
+        if pivot.exists():
+            user_room_ids = list(pivot.values_list('room_id', flat=True))
+            connected_user_room = RoomUser.objects.filter(
+                room_id__in=user_room_ids,
+                user_id=connected_user.pk,
+            ).first()
+
+            if connected_user_room is not None:
+                room = Room.objects.get(pk=connected_user_room.room_id)
+                return Response(sl.RoomSerializer(room).data)
+
+        room = Room.objects.create(
+            name=f"{connected_user.first_name}",
+            is_group=False
+        )
+        RoomUser.objects.create(room=room, user=user)
+        RoomUser.objects.create(room=room, user=connected_user)
+        return Response(sl.RoomSerializer(room).data)

@@ -16,12 +16,23 @@ class RoomUser(models.Model):
 
 
 class Chat(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User,
+        related_name='conversations',
+        on_delete=models.CASCADE
+    )
+    room = models.ForeignKey(
+        Room,
+        related_name='conversations',
+        on_delete=models.CASCADE
+    )
     message = models.CharField(max_length=1024)
     is_read = models.BooleanField(default=False, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    class Meta:
+        ordering = ['-updated_at', '-pk']
 
     def __str__(self):
         return f"{self.id}: {self.message}"
