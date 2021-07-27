@@ -49,21 +49,6 @@ class UserViewSet(viewsets.ViewSet):
         query_set = User.objects.exclude(pk=request.user.pk)
         return Response(sl.UserSerializer(query_set, many=True).data)
 
-    # def create(self, request):
-    #     pass
-
-    # def retrieve(self, request, pk=None):
-    #     pass
-
-    # def update(self, request, pk=None):
-    #     pass
-
-    # def partial_update(self, request, pk=None):
-    #     pass
-
-    # def destroy(self, request, pk=None):
-    #     pass
-
 
 class RoomViewSet(viewsets.ViewSet):
     authentication_classes = [TokenAuthentication]
