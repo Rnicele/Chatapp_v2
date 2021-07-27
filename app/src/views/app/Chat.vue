@@ -10,16 +10,16 @@
           <v-list dense>
             <v-list-item-group color="primary">
               <v-list-item
-                v-for="(item, i) in items"
+                v-for="(user, i) in users"
                 :key="i"
-                @click="chatName(item)"
+                @click="chatName(user)"
               >
                 <v-list-item-icon style="margin-right: 10px;">
-                  <v-icon v-text="item.icon"></v-icon>
+                  <v-icon v-text="user.icon"></v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title
-                    v-text="item.text"
+                    v-text="user.text"
                     style="font-size: 17px;"
                   ></v-list-item-title>
                 </v-list-item-content>
@@ -84,17 +84,19 @@ import axios from "axios";
 export default {
   data: () => ({
     hasClick: false,
-    items: [
-      { text: "Juan Dela Cruz", icon: "mdi-account" },
-      { text: "Coco Martin", icon: "mdi-account" },
-      { text: "Tao po", icon: "mdi-account" }
-    ],
-    name: ""
+    name: "",
+    users: [],
   }),
   async mounted() {
     // GET USERS TEST
     const { data } = await axios.get("http://127.0.0.1:7000/users/");
-    console.log("users", data);
+    
+    data.forEach(element => {
+      var fullname = element.first_name + " " + element.last_name;
+      var list = {text: fullname, icon: "mdi-account" }
+      this.users.push(list);
+    });
+    // this.users = data;
   },
   methods: {
     async chatName(name) {
