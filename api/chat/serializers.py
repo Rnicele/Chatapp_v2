@@ -44,7 +44,7 @@ class RoomUserSerializer(serializers.ModelSerializer):
 class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
-        fields = ['id', 'message', 'is_read', 'created_at', 'user', 'room']
+        fields = '__all__'
 
 
 class RoomSerializer(serializers.ModelSerializer):
