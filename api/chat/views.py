@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from . import serializers as sl
 from .helpers import user_construct
-from .models import Room, RoomUser
+from .models import Chat, Room, RoomUser
 
 
 class Login(APIView):
@@ -78,9 +78,16 @@ class RoomViewSet(viewsets.ViewSet):
                 return Response(sl.RoomSerializer(room).data)
 
         room = Room.objects.create(
-            name=f"{connected_user.first_name}",
+            name=connected_user.first_name,
             is_group=False
         )
         RoomUser.objects.create(room=room, user=user)
         RoomUser.objects.create(room=room, user=connected_user)
         return Response(sl.RoomSerializer(room).data)
+
+
+class ChatViewSet(viewsets.ModelViewSet):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Chat.objects.all()
+    serializer_class = sl.ChatSerializer

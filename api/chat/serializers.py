@@ -44,7 +44,7 @@ class RoomUserSerializer(serializers.ModelSerializer):
 class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
-        fields = ['id', 'message', 'is_read', 'updated_at', 'user']
+        fields = ['id', 'message', 'is_read', 'created_at', 'user', 'room']
 
 
 class RoomSerializer(serializers.ModelSerializer):

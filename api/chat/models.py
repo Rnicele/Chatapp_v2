@@ -32,7 +32,7 @@ class Chat(models.Model):
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     class Meta:
-        ordering = ['-updated_at', '-pk']
+        ordering = ['-created_at', '-pk']
 
     def __str__(self):
         return f"{self.id}: {self.message}"
