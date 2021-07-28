@@ -56,6 +56,12 @@
             required
           ></v-text-field>
 
+          <v-text-field
+            outlined
+            v-model="avatar"
+            label="Avatar Url"
+          ></v-text-field>
+
           <v-card-actions>
             <v-btn class="mr-4" @click="register" :loading="loading">
               Signup
@@ -85,6 +91,7 @@ export default {
       email: null,
       username: null,
       password: null,
+      avatar: null,
       errors: [],
       loading: false
     };
@@ -103,7 +110,8 @@ export default {
           last_name: this.last_name,
           email: this.email,
           username: this.username,
-          password: this.password
+          password: this.password,
+          avatar: this.avatar
         });
 
         this.$store.dispatch("setUserToken", data);

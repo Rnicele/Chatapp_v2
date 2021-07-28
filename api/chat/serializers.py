@@ -1,8 +1,7 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Chat, Room, RoomUser
+from .models import Chat, Room, RoomUser, User
 
 
 class LoginSerializer(serializers.Serializer):
@@ -19,6 +18,7 @@ class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField()
     username = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=255)
+    avatar = serializers.CharField(max_length=255)
 
     def register(self):
         user = User(**self.validated_data)
@@ -32,7 +32,7 @@ class RegisterSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name']
+        fields = ['id', 'first_name', 'last_name', 'avatar']
 
 
 class RoomUserSerializer(serializers.ModelSerializer):

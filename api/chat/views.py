@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
@@ -8,7 +7,7 @@ from rest_framework.views import APIView
 
 from . import serializers as sl
 from .helpers import user_construct
-from .models import Chat, Room, RoomUser
+from .models import Chat, Room, RoomUser, User
 
 
 class Login(APIView):

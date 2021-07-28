@@ -1,5 +1,10 @@
-from django.contrib.auth.models import User
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+
+class User(AbstractUser):
+    avatar = models.CharField(max_length=255, blank=True, null=True)
 
 
 class Room(models.Model):
@@ -12,19 +17,22 @@ class Room(models.Model):
 
 class RoomUser(models.Model):
     room = models.ForeignKey(Room, on_delete=models.DO_NOTHING)
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING
+    )
 
 
 class Chat(models.Model):
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         related_name='conversations',
-        on_delete=models.CASCADE
+        on_delete=models.DO_NOTHING
     )
     room = models.ForeignKey(
         Room,
         related_name='conversations',
-        on_delete=models.CASCADE
+        on_delete=models.DO_NOTHING
     )
     message = models.CharField(max_length=1024)
     is_read = models.BooleanField(default=False, blank=True, null=True)
