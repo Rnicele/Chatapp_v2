@@ -10,18 +10,17 @@
           <v-list dense>
             <v-list-item-group color="primary">
               <v-list-item
-                v-for="(user, i) in users"
-                :key="i"
-                @click="chatName(user)"
+                v-for="user in getUsers"
+                :key="user.id"
+                @click="selectedUser = user"
               >
-                <v-list-item-icon style="margin-right: 10px;">
-                  <v-icon v-text="user.icon"></v-icon>
-                </v-list-item-icon>
+                <v-list-item-avatar style="margin-right: 10px;">
+                  <v-img :src="user.avatar || getUsersDefaultAvatar"></v-img>
+                </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title
-                    v-text="user.text"
-                    style="font-size: 17px;"
-                  ></v-list-item-title>
+                  <v-list-item-title style="font-size: 17px;">
+                    {{ user | fullName }}
+                  </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -29,9 +28,9 @@
         </div>
       </v-card>
       <v-card elevation="1" width="79%" style="margin: 0 0.5%;height: 100%;">
-        <div v-if="hasClick" style="height: 100%;">
+        <div v-if="selectedUser" style="height: 100%;">
           <div class="header" style="margin: 0 10px">
-            <h1 v-text="name"></h1>
+            <h1>{{ selectedUser | fullName }}</h1>
             <v-divider></v-divider>
           </div>
           <div class="body" style="margin: 0 10px 10px 10px;height: 85%;">
@@ -79,31 +78,27 @@
 </template>
 
 <script>
-import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   data: () => ({
-    hasClick: false,
-    name: "",
-    users: [],
+    selectedUser: null
   }),
-  async mounted() {
-    // GET USERS TEST
-    const { data } = await axios.get("http://127.0.0.1:7000/users/");
-    
-    data.forEach(element => {
-      var fullname = element.first_name + " " + element.last_name;
-      var list = {text: fullname, icon: "mdi-account" }
-      this.users.push(list);
-    });
-    // this.users = data;
+  mounted() {
+    this.$store.dispatch("setUsers");
   },
-  methods: {
-    async chatName(name) {
-      this.hasClick = true;
-      // console.log("click", name)
-      this.name = name.text;
+  methods: {},
+  computed: {
+    ...mapGetters(["getUsers", "getUsersDefaultAvatar", "getUsersLoading"])
+  },
+  filters: {
+    fullName(user) {
+      return `${user.first_name} ${user.last_name}`;
     }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+// classes
+</style>
