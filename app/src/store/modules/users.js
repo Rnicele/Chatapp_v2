@@ -16,8 +16,8 @@ const mutations = {
   setUsers(state, payload) {
     state.users = payload;
   },
-  setUsersLoading(state) {
-    state.usersLoading = state;
+  setUsersLoading(state, payload) {
+    state.usersLoading = payload;
   }
 };
 
