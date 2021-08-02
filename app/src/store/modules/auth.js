@@ -1,13 +1,13 @@
 import axios from "axios";
 
 const state = () => ({
-  user: localStorage.getItem("user"),
+  user: JSON.parse(localStorage.getItem("user")),
   token: localStorage.getItem("token")
 });
 
 const getters = {
   isAuthenticated: state => state.user && state.token,
-  getUser: state => JSON.parse(state.user),
+  getUser: state => state.user,
   getToken: state => state.token,
   getUserName: state => state.user.first_name,
   getUserFullName: state => `${state.user.first_name} ${state.user.last_name}`
@@ -41,7 +41,6 @@ const actions = {
   },
   signOut: ({ commit }) => {
     commit("resetAuth");
-
   }
 };
 

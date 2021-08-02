@@ -23,7 +23,6 @@ const mutations = {
 
 const actions = {
   setRoom: async ({ commit }, { uid, cuid }) => {
-    console.log(uid, cuid);
     try {
       commit("setChatsLoading", true);
       const { data } = await getAll(uid, cuid);
