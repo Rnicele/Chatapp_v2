@@ -1,4 +1,5 @@
 import { getAll } from "@/services/chatService";
+import _ from "lodash";
 
 const state = () => ({
   room: null,
@@ -6,13 +7,14 @@ const state = () => ({
 });
 
 const getters = {
-  getChats: state => state.room.conversations,
+  getRoom: state => state.room,
+  getChats: state => _.get(state.room, "conversations"),
   getChatsLoading: state => state.chatsLoading
 };
 
 const mutations = {
-  setChats(state, payload) {
-    state.chats = payload;
+  setRoom(state, payload) {
+    state.room = payload;
   },
   setChatsLoading(state, payload) {
     state.chatsLoading = payload;
@@ -20,14 +22,14 @@ const mutations = {
 };
 
 const actions = {
-  setChats: async ({ commit }, {uid, cuid}) => {
+  setRoom: async ({ commit }, { uid, cuid }) => {
     console.log(uid, cuid);
     try {
       commit("setChatsLoading", true);
       const { data } = await getAll(uid, cuid);
-      commit("setChats", data);
+      commit("setRoom", data);
     } catch (error) {
-      console.error("[setChats]", error);
+      console.error("[setRoom]", error);
     }
 
     commit("setChatsLoading", false);
