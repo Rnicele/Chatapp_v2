@@ -3,7 +3,10 @@
     <v-container fill-height fluid>
       <v-card elevation="1" width="19%" style="margin: 0 0.5%;height: 100%;">
         <div class="header" style="margin: 0 10px">
-          <h1>Chat</h1>
+          <h1>Chat</h1> 
+          <v-btn icon class="ml-4" @click="signOut">
+            <v-icon>mdi-logout-variant</v-icon>
+          </v-btn>
           <v-divider></v-divider>
         </div>
         <div class="body" style="margin: 0 10px 10px 10px;">
@@ -12,7 +15,7 @@
               <v-list-item
                 v-for="user in getUsers"
                 :key="user.id"
-                @click="selectedUser = user"
+                @click="setSelectedUser(user)"
               >
                 <v-list-item-avatar style="margin-right: 10px;">
                   <v-img :src="user.avatar || getUsersDefaultAvatar"></v-img>
@@ -78,7 +81,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions} from "vuex";
 
 export default {
   data: () => ({
@@ -87,9 +90,18 @@ export default {
   mounted() {
     this.$store.dispatch("setUsers");
   },
-  methods: {},
+  methods: {
+    ...mapActions(["signOut","setChats"]),
+    setSelectedUser(user){
+
+      console.log(this.getUser.id, user.id);
+      this.selectedUser = user;
+
+      this.setChats({uid: this.getUser.id, cuid: user.id});
+    } 
+  },
   computed: {
-    ...mapGetters(["getUsers", "getUsersDefaultAvatar", "getUsersLoading"])
+    ...mapGetters(["getUsers", "getUsersDefaultAvatar", "getUsersLoading", "getUser"])
   },
   filters: {
     fullName(user) {
@@ -101,4 +113,15 @@ export default {
 
 <style lang="scss" scoped>
 // classes
+.header {
+  button {
+    right: 0;
+    position: absolute;
+    padding: 10px;
+    margin: 5px;
+  }
+  h1 {
+    display: inline-block;
+  }
+}
 </style>
