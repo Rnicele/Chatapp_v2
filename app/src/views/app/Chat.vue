@@ -1,15 +1,15 @@
 <template>
-  <div class="chat" style="height: 100%;">
+  <div class="chat full-height">
     <v-container fill-height fluid>
-      <v-card elevation="1" width="19%" style="margin: 0 0.5%;height: 100%;">
-        <div class="header" style="margin: 0 10px">
+      <v-card elevation="1" class="v-card-custom v-card-width-1">
+        <div class="header">
           <h1>Chat</h1> 
           <v-btn icon class="ml-4" @click="signOut">
             <v-icon>mdi-logout-variant</v-icon>
           </v-btn>
           <v-divider></v-divider>
         </div>
-        <div class="body" style="margin: 0 10px 10px 10px;">
+        <div class="body">
           <v-list dense>
             <v-list-item-group color="primary">
               <v-list-item
@@ -17,11 +17,11 @@
                 :key="user.id"
                 @click="setSelectedUser(user)"
               >
-                <v-list-item-avatar style="margin-right: 10px;">
+                <v-list-item-avatar class="v-avatar">
                   <v-img :src="user.avatar || getUsersDefaultAvatar"></v-img>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title style="font-size: 17px;">
+                  <v-list-item-title class="v-title">
                     {{ user | fullName }}
                   </v-list-item-title>
                 </v-list-item-content>
@@ -30,13 +30,13 @@
           </v-list>
         </div>
       </v-card>
-      <v-card elevation="1" width="79%" style="margin: 0 0.5%;height: 100%;">
-        <div v-if="selectedUser" style="height: 100%;">
-          <div class="header" style="margin: 0 10px">
+      <v-card elevation="1" class="v-card-custom v-card-width-2">
+        <div class="full-height" v-if="selectedUser">
+          <div class="header">
             <h1>{{ selectedUser | fullName }}</h1>
             <v-divider></v-divider>
           </div>
-          <div class="body" style="margin: 0 10px 10px 10px;height: 85%;">
+          <div class="body semi-full-height">
             <v-container class="fill-height">
               <v-row class="fill-height pb-14" align="end">
                 <!-- <v-col>
@@ -68,9 +68,9 @@
             </v-footer>
           </div>
         </div>
-        <div v-else style="height: 100%;">
-          <div class="body" style="margin: 0 10px 10px 10px;height: 100%;">
-            <h1 style="text-align: center;padding: 100px;padding-top: 450px;">
+        <div v-else>
+          <div class="body full-height">
+            <h1>
               NO MESSAGES
             </h1>
           </div>
@@ -113,7 +113,39 @@ export default {
 
 <style lang="scss" scoped>
 // classes
+
+.full-height {
+  height: 100%;
+}
+.semi-full-height{
+  height: 85%;
+}
+.v-card-custom {
+  margin: 0 0.5%;
+  height: 100%;
+}
+.v-card-width-1{
+  width: 19%; 
+}
+.v-card-width-2{
+  width: 79%; 
+}
+.body {
+  margin: 0 10px 10px 10px;
+  h1 {
+    text-align: center;
+    padding: 100px;
+    padding-top: 450px;
+  }
+}
+.v-avatar{
+  margin-right: 10px;
+}
+.v-title{
+  font-size: 17px!important;
+}
 .header {
+  margin: 0 10px;
   button {
     right: 0;
     position: absolute;
