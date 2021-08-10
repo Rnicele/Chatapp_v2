@@ -1,4 +1,4 @@
-import { getAll } from "@/services/chatService";
+import { create, getAll } from "@/services/chatService";
 import _ from "lodash";
 
 const state = () => ({
@@ -16,6 +16,9 @@ const mutations = {
   setRoom(state, payload) {
     state.room = payload;
   },
+  setConversations(state, payload) {
+    state.room.conversations = payload;
+  },
   setChatsLoading(state, payload) {
     state.chatsLoading = payload;
   }
@@ -32,6 +35,20 @@ const actions = {
     }
 
     commit("setChatsLoading", false);
+  },
+  sendChat: async ({ state, commit }, { message, user }) => {
+    try {
+      const payload = {
+        message,
+        user,
+        room: _.get(state, "room.id"),
+        is_read: 0
+      };
+      const { data } = await create(payload);
+      commit("setConversations", [..._.get(state.room, "conversations"), data]);
+    } catch (error) {
+      console.error("[setRoom]", error);
+    }
   },
   setChatsLoading: ({ commit }, payload) => commit("setChatsLoading", payload)
 };

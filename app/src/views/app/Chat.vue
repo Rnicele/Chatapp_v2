@@ -3,7 +3,7 @@
     <v-container fill-height fluid>
       <v-card elevation="1" class="v-card-custom v-card-width-1">
         <div class="header">
-          <h1>Chat</h1> 
+          <h1>Chat</h1>
           <v-btn icon class="ml-4" @click="signOut">
             <v-icon>mdi-logout-variant</v-icon>
           </v-btn>
@@ -39,28 +39,51 @@
           <div class="body semi-full-height">
             <v-container class="fill-height">
               <v-row class="fill-height pb-14" align="end">
-                <!-- <v-col>
-                  <div v-for="(item, index) in chat" :key="index"
-                      :class="['d-flex flex-row align-center my-2', item.from == 'user' ? 'justify-end': null]">
-                    <span v-if="item.from == 'user'" class="blue--text mr-3">{{ item.msg }}</span>
-                    <v-avatar :color="item.from == 'user' ? 'indigo': 'red'" size="36">
-                      <span class="white--text">{{ item.from[0] }}</span>
-                    </v-avatar>
-                    <span v-if="item.from != 'user'" class="blue--text ml-3">{{ item.msg }}</span>
-                  </div>
-                </v-col> -->
+                <v-col>
+                  <v-list>
+                    <v-list-item
+                      class="px-0"
+                      v-for="(chat, index) in getChats"
+                      :key="index"
+                    >
+                      <template v-if="chat.user === selectedUser.id">
+                        <v-list-item-avatar>
+                          <v-img :src="selectedUser.avatar"></v-img>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title
+                            v-text="chat.message"
+                          ></v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                      <template v-else>
+                        <v-list-item-avatar></v-list-item-avatar>
+                        <v-list-item-content></v-list-item-content>
+                        <v-list-item-content>
+                          <v-list-item-title
+                            class="text-right"
+                            v-text="chat.message"
+                          ></v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                    </v-list-item>
+                  </v-list>
+                </v-col>
               </v-row>
             </v-container>
-
             <v-footer>
               <v-container class="ma-0 pa-0">
                 <v-row no-gutters>
                   <v-col>
                     <div class="d-flex flex-row align-center">
-                      <!-- <v-text-field v-model="msg" placeholder="Type Something" @keypress.enter="send"></v-text-field>
-                      <v-btn icon class="ml-4" @click="send"><v-icon>mdi-send</v-icon></v-btn> -->
-                      <v-text-field placeholder="Type Something"></v-text-field>
-                      <v-btn icon class="ml-4"><v-icon>mdi-send</v-icon></v-btn>
+                      <v-text-field
+                        v-model="message"
+                        @keypress.enter="send"
+                        placeholder="Type Something"
+                      ></v-text-field>
+                      <v-btn icon class="ml-4" @click="send">
+                        <v-icon>mdi-send</v-icon>
+                      </v-btn>
                     </div>
                   </v-col>
                 </v-row>
@@ -81,27 +104,35 @@
 </template>
 
 <script>
-import { mapGetters, mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data: () => ({
-    selectedUser: null
+    selectedUser: null,
+    message: ""
   }),
   mounted() {
     this.$store.dispatch("setUsers");
   },
   methods: {
-    ...mapActions(["signOut","setChats"]),
-    setSelectedUser(user){
-
-      console.log(this.getUser.id, user.id);
+    ...mapActions(["signOut", "setRoom", "sendChat"]),
+    setSelectedUser(user) {
       this.selectedUser = user;
-
-      this.setChats({uid: this.getUser.id, cuid: user.id});
-    } 
+      this.setRoom({ uid: this.getUser.id, cuid: user.id });
+    },
+    send() {
+      this.sendChat({ message: this.message, user: this.getUser.id });
+      this.message = "";
+    }
   },
   computed: {
-    ...mapGetters(["getUsers", "getUsersDefaultAvatar", "getUsersLoading", "getUser"])
+    ...mapGetters([
+      "getUsers",
+      "getUsersDefaultAvatar",
+      "getUsersLoading",
+      "getUser",
+      "getChats"
+    ])
   },
   filters: {
     fullName(user) {
@@ -112,23 +143,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// classes
-
 .full-height {
   height: 100%;
 }
-.semi-full-height{
+.semi-full-height {
   height: 85%;
 }
 .v-card-custom {
   margin: 0 0.5%;
   height: 100%;
 }
-.v-card-width-1{
-  width: 19%; 
+.v-card-width-1 {
+  width: 19%;
 }
-.v-card-width-2{
-  width: 79%; 
+.v-card-width-2 {
+  width: 79%;
 }
 .body {
   margin: 0 10px 10px 10px;
@@ -138,11 +167,11 @@ export default {
     padding-top: 450px;
   }
 }
-.v-avatar{
+.v-avatar {
   margin-right: 10px;
 }
-.v-title{
-  font-size: 17px!important;
+.v-title {
+  font-size: 17px !important;
 }
 .header {
   margin: 0 10px;
