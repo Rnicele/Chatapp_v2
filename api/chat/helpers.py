@@ -2,7 +2,7 @@ from rest_framework.authtoken.models import Token
 
 
 def user_construct(user):
-    fields = ['id', 'email', 'first_name', 'last_name', 'date_joined']
+    fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'avatar']
     token, created = Token.objects.get_or_create(user=user)
 
     return {

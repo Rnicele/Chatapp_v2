@@ -36,8 +36,8 @@
             <h1>{{ selectedUser | fullName }}</h1>
             <v-divider></v-divider>
           </div>
-          <div class="body semi-full-height">
-            <v-container class="fill-height">
+          <div class="body semi-full-height" style="max-height: 943px;">
+            <v-container class="fill-height div-scroll">
               <v-row class="fill-height pb-14" align="end">
                 <v-col>
                   <v-list>
@@ -46,25 +46,33 @@
                       v-for="(chat, index) in getChats"
                       :key="index"
                     >
-                      <template v-if="chat.user === selectedUser.id">
+                      <template v-if="chat.user === selectedUser.id" style="overflow: hidden;" class="chat-item">
                         <v-list-item-avatar>
-                          <v-img :src="selectedUser.avatar"></v-img>
+                          <v-img :src="selectedUser.avatar || getUsersDefaultAvatar"></v-img>
                         </v-list-item-avatar>
                         <v-list-item-content>
                           <v-list-item-title
+                            style="vertical-align: top;white-space: normal;"
                             v-text="chat.message"
                           ></v-list-item-title>
                         </v-list-item-content>
+                        <v-list-item-content></v-list-item-content>
                       </template>
-                      <template v-else>
-                        <v-list-item-avatar></v-list-item-avatar>
+
+                      <template v-else style="overflow: hidden;" class="chat-item">
+                        
                         <v-list-item-content></v-list-item-content>
                         <v-list-item-content>
                           <v-list-item-title
                             class="text-right"
+                            style="vertical-align: top;white-space: normal;"
                             v-text="chat.message"
                           ></v-list-item-title>
                         </v-list-item-content>
+                        <v-list-item-avatar class="v-avatar">
+                          <v-img :src="loginUser.avatar || getUsersDefaultAvatar"></v-img>
+                        </v-list-item-avatar>
+                        
                       </template>
                     </v-list-item>
                   </v-list>
@@ -106,10 +114,13 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+
 export default {
+  
   data: () => ({
     selectedUser: null,
-    message: ""
+    message: "",
+    loginUser: null,
   }),
   mounted() {
     this.$store.dispatch("setUsers");
@@ -119,6 +130,9 @@ export default {
     setSelectedUser(user) {
       this.selectedUser = user;
       this.setRoom({ uid: this.getUser.id, cuid: user.id });
+      this.loginUser = this.getUser;
+      //console.log(this.loginUser)
+      
     },
     send() {
       this.sendChat({ message: this.message, user: this.getUser.id });
@@ -143,11 +157,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.div-scroll {
+    overflow: scroll;
+    height: 100%;
+    max-height: 100%;
+    overscroll-behavior-y: contain;
+    scroll-snap-type: y proximity;
+}
+.div-scroll > .chat-item > .chat-item:last-child {
+  scroll-snap-align: end;
+}
+
 .full-height {
   height: 100%;
+  max-height: 949px;
 }
 .semi-full-height {
   height: 85%;
+  max-height: 85%;
 }
 .v-card-custom {
   margin: 0 0.5%;
