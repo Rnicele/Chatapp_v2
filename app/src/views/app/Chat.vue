@@ -1,3 +1,4 @@
+
 <template>
   <div class="chat full-height">
     <v-container fill-height fluid>
@@ -15,7 +16,8 @@
               <v-list-item
                 v-for="user in getUsers"
                 :key="user.id"
-                @click="setSelectedUser(user)"
+                @click="setSelectedUser(user); scrollToBottom;"
+
               >
                 <v-list-item-avatar class="v-avatar">
                   <v-img :src="user.avatar || getUsersDefaultAvatar"></v-img>
@@ -36,8 +38,9 @@
             <h1>{{ selectedUser | fullName }}</h1>
             <v-divider></v-divider>
           </div>
-          <div class="body semi-full-height" style="max-height: 943px;">
-            <v-container class="fill-height div-scroll">
+          <div class="body semi-full-height chat-body" style="max-height: 943px;">
+            
+            <v-container class="fill-height div-scroll" id="container" ref="container">
               <v-row class="fill-height pb-14" align="end">
                 <v-col>
                   <v-list>
@@ -46,26 +49,25 @@
                       v-for="(chat, index) in getChats"
                       :key="index"
                     >
-                      <template v-if="chat.user === selectedUser.id" style="overflow: hidden;" class="chat-item">
+                      <template v-if="chat.user === selectedUser.id" class="chat-item" > 
                         <v-list-item-avatar>
                           <v-img :src="selectedUser.avatar || getUsersDefaultAvatar"></v-img>
                         </v-list-item-avatar>
                         <v-list-item-content>
                           <v-list-item-title
-                            style="vertical-align: top;white-space: normal;"
+                            class="v-list-style"
                             v-text="chat.message"
                           ></v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-content></v-list-item-content>
                       </template>
 
-                      <template v-else style="overflow: hidden;" class="chat-item">
+                      <template v-else class="chat-item">
                         
                         <v-list-item-content></v-list-item-content>
                         <v-list-item-content>
                           <v-list-item-title
-                            class="text-right"
-                            style="vertical-align: top;white-space: normal;"
+                            class="text-right v-list-style"
                             v-text="chat.message"
                           ></v-list-item-title>
                         </v-list-item-content>
@@ -114,7 +116,6 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-
 export default {
   
   data: () => ({
@@ -129,15 +130,22 @@ export default {
     ...mapActions(["signOut", "setRoom", "sendChat"]),
     setSelectedUser(user) {
       this.selectedUser = user;
-      this.setRoom({ uid: this.getUser.id, cuid: user.id });
+      this.setRoom({ uid: this.getUser.id, 
+      cuid: user.id });
       this.loginUser = this.getUser;
-      //console.log(this.loginUser)
-      
+      setTimeout(() => {
+        const container = this.$refs.container;
+        container.scrollTop = container.scrollHeight;
+      }, 100);
     },
     send() {
       this.sendChat({ message: this.message, user: this.getUser.id });
       this.message = "";
-    }
+      setTimeout(() => {
+        const container = this.$refs.container;
+        container.scrollTop = container.scrollHeight;
+      }, 100);
+    },
   },
   computed: {
     ...mapGetters([
@@ -148,6 +156,7 @@ export default {
       "getChats"
     ])
   },
+  
   filters: {
     fullName(user) {
       return `${user.first_name} ${user.last_name}`;
@@ -157,15 +166,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.chat-item {
+  overflow: hidden;
+}
+.v-list-style {
+   vertical-align: top;
+   white-space: normal;
+}
 .div-scroll {
-    overflow: scroll;
+    //overflow: scroll;
     height: 100%;
     max-height: 100%;
-    overscroll-behavior-y: contain;
-    scroll-snap-type: y proximity;
-}
-.div-scroll > .chat-item > .chat-item:last-child {
-  scroll-snap-align: end;
+    overflow-y: scroll;
 }
 
 .full-height {
