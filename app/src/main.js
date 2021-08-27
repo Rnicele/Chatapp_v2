@@ -1,11 +1,23 @@
 import axios from "axios";
 import Vue from "vue";
+import VueSocketIO from "vue-socket.io";
 import App from "./App.vue";
 import snackbarPlugin from "./plugins/snackbar";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 import store from "./store";
 
+Vue.use(
+  new VueSocketIO({
+    debug: true,
+    connection: "http://localhost:3000",
+    vuex: {
+      store,
+      actionPrefix: "SOCKET_",
+      mutationPrefix: "SOCKET_"
+    }
+  })
+);
 
 Vue.use(snackbarPlugin, { store });
 

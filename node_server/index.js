@@ -11,8 +11,18 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.emit("hello", "Socket WORKS!");
-  console.log("a user connected");
+  socket.on("joinRoom", (room) => {
+    socket.rooms.forEach((joinedRoom) => {
+      if (Number.isInteger(joinedRoom)) {
+        socket.emit("test", `LEAVING ${joinedRoom}`);
+        socket.leave(joinedRoom);
+      }
+    });
+    socket.join(room);
+  });
+  socket.on("sendMessage", ({ room, message }) =>
+    socket.broadcast.to(room).emit("newMessage", message)
+  );
 });
 
 server.listen(3000, () => {

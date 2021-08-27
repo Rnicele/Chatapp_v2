@@ -1,4 +1,3 @@
-
 <template>
   <div class="chat full-height">
     <v-container fill-height fluid>
@@ -16,8 +15,7 @@
               <v-list-item
                 v-for="user in getUsers"
                 :key="user.id"
-                @click="setSelectedUser(user); scrollToBottom;"
-
+                @click="setSelectedUser(user)"
               >
                 <v-list-item-avatar class="v-avatar">
                   <v-img :src="user.avatar || getUsersDefaultAvatar"></v-img>
@@ -38,9 +36,8 @@
             <h1>{{ selectedUser | fullName }}</h1>
             <v-divider></v-divider>
           </div>
-          <div class="body semi-full-height chat-body" style="max-height: 943px;">
-            
-            <v-container class="fill-height div-scroll" id="container" ref="container">
+          <div class="body semi-full-height chat-body">
+            <v-container class="fill-height div-scroll" ref="container">
               <v-row class="fill-height pb-14" align="end">
                 <v-col>
                   <v-list>
@@ -49,9 +46,14 @@
                       v-for="(chat, index) in getChats"
                       :key="index"
                     >
-                      <template v-if="chat.user === selectedUser.id" class="chat-item" > 
+                      <template
+                        v-if="chat.user === selectedUser.id"
+                        class="chat-item"
+                      >
                         <v-list-item-avatar>
-                          <v-img :src="selectedUser.avatar || getUsersDefaultAvatar"></v-img>
+                          <v-img
+                            :src="selectedUser.avatar || getUsersDefaultAvatar"
+                          ></v-img>
                         </v-list-item-avatar>
                         <v-list-item-content>
                           <v-list-item-title
@@ -63,7 +65,6 @@
                       </template>
 
                       <template v-else class="chat-item">
-                        
                         <v-list-item-content></v-list-item-content>
                         <v-list-item-content>
                           <v-list-item-title
@@ -72,9 +73,9 @@
                           ></v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-avatar class="v-avatar">
-                          <v-img :src="loginUser.avatar || getUsersDefaultAvatar"></v-img>
+                          <v-img :src="getUser.avatar || getUsersDefaultAvatar">
+                          </v-img>
                         </v-list-item-avatar>
-                        
                       </template>
                     </v-list-item>
                   </v-list>
@@ -115,37 +116,56 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { create } from "@/services/chatService";
 
 export default {
-  
+  sockets: {
+    newMessage: function(data) {
+      this.addConversation(data);
+      this.scrollToBottom();
+    }
+  },
   data: () => ({
     selectedUser: null,
-    message: "",
-    loginUser: null,
+    message: ""
   }),
   mounted() {
     this.$store.dispatch("setUsers");
   },
   methods: {
-    ...mapActions(["signOut", "setRoom", "sendChat"]),
-    setSelectedUser(user) {
+    ...mapActions(["signOut", "setRoom", "addConversation"]),
+    async setSelectedUser(user) {
       this.selectedUser = user;
-      this.setRoom({ uid: this.getUser.id, 
-      cuid: user.id });
-      this.loginUser = this.getUser;
+      await this.setRoom({ uid: this.getUser.id, cuid: user.id });
+      this.$socket.emit("joinRoom", this.getRoom.id);
+      this.scrollToBottom();
+    },
+    async send() {
+      try {
+        const payload = {
+          message: this.message,
+          user: this.getUser.id,
+          room: this.getRoom.id,
+          is_read: 0
+        };
+        const { data } = await create(payload);
+        await this.addConversation(data);
+        this.$socket.emit("sendMessage", {
+          room: this.getRoom.id,
+          message: data
+        });
+        this.message = "";
+        this.scrollToBottom();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    scrollToBottom() {
       setTimeout(() => {
         const container = this.$refs.container;
         container.scrollTop = container.scrollHeight;
       }, 100);
-    },
-    send() {
-      this.sendChat({ message: this.message, user: this.getUser.id });
-      this.message = "";
-      setTimeout(() => {
-        const container = this.$refs.container;
-        container.scrollTop = container.scrollHeight;
-      }, 100);
-    },
+    }
   },
   computed: {
     ...mapGetters([
@@ -153,10 +173,10 @@ export default {
       "getUsersDefaultAvatar",
       "getUsersLoading",
       "getUser",
+      "getRoom",
       "getChats"
     ])
   },
-  
   filters: {
     fullName(user) {
       return `${user.first_name} ${user.last_name}`;
@@ -166,18 +186,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.chat-body {
+  max-height: 943px;
+}
 .chat-item {
   overflow: hidden;
 }
 .v-list-style {
-   vertical-align: top;
-   white-space: normal;
+  vertical-align: top;
+  white-space: normal;
 }
 .div-scroll {
-    //overflow: scroll;
-    height: 100%;
-    max-height: 100%;
-    overflow-y: scroll;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: scroll;
 }
 
 .full-height {
