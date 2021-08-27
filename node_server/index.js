@@ -14,7 +14,6 @@ io.on("connection", (socket) => {
   socket.on("joinRoom", (room) => {
     socket.rooms.forEach((joinedRoom) => {
       if (Number.isInteger(joinedRoom)) {
-        socket.emit("test", `LEAVING ${joinedRoom}`);
         socket.leave(joinedRoom);
       }
     });
